@@ -135,10 +135,10 @@
 
             //camera.position.z = 5;
 
-            //controls = new THREE.OrbitControls( camera, renderer.domElement );
-            controls = new THREE.TrackballControls( camera );
+            controls = new THREE.OrbitControls( camera, renderer.domElement );
+            /*controls = new THREE.TrackballControls( camera );
             controls.staticMoving = true;
-            controls.dynamicDampingFactor = 0.3;
+            controls.dynamicDampingFactor = 0.3;*/
 
 
             var light1 = new THREE.PointLight(0xffffff, 1.0, 0.0, 1);
