@@ -90,29 +90,43 @@
             // MAIN GROUP //
             ////////////////
             var group = new THREE.Group();
-
-
+            var deselctColor = 0x8888ff;
+            var selectColor = 0x440000;
 
             var sphereSize = 15;
-            var maxX = 4;
-            var maxY = 4;
-            var maxZ = 4;
+            var gridSize = 4;
+            
+            try {
+                if(getParameterByName("size"))
+                    gridSize = parseInt(getParameterByName("size"));
+                if(gridSize > 20) {
+                    setTimeout(function(){
+                        alert("Way too big setting to max 20");
+                    },1);
+                    gridSize = 20;
+                }
+            } catch(ex) {}
+
+            var maxX = gridSize;
+            var maxY = gridSize;
+            var maxZ = gridSize;
             var distance = 80;
             var cylinderRadius = 2;
             var cylinderLength = distance - (sphereSize*2.0) + (sphereSize/2.0);
             var offset = (distance * (maxX-1)) / 2.0;
-            var deselctColor = 0x8888ff;
-            var selectColor = 0x440000;
-            var sphereGeometry = new THREE.SphereGeometry( sphereSize, sphereSize, sphereSize ); 
-            var cylinderGeometry = new THREE.CylinderGeometry( cylinderRadius, cylinderRadius, cylinderLength);
+            var sphereGeometry = new THREE.SphereGeometry( sphereSize, 32, 32); 
+            var cylinderGeometry = new THREE.CylinderGeometry( cylinderRadius, cylinderRadius, cylinderLength, 3);
             for(var x=0;x<maxX;x++) {
                 for(var y=0;y<maxY;y++) {
                     for(var z=0;z<maxZ;z++) {
+
+                        ///Building up the Spheres
                         var sphereMaterial = new THREE.MeshLambertMaterial( {color: deselctColor} ); 
                         var sphere = new THREE.Mesh(sphereGeometry, sphereMaterial);
                         sphere.position.set((x*distance)-offset, (y*distance)-offset, (z*distance)-offset);
                         group.add(sphere);
 
+                        //Builds up the connection points
                         if(x < maxX-1) {
                             var cylinderMaterial = new THREE.MeshBasicMaterial( {color: deselctColor} );
                             var cylinder = new THREE.Mesh( cylinderGeometry, cylinderMaterial );
@@ -140,8 +154,10 @@
                     }
                 }
             }
-            window.addEventListener( 'click', sphere_clicked, false );
+            scene.add(group);
 
+
+            window.addEventListener( 'mousedown', sphere_clicked, false );
             function sphere_clicked(e) {
                 mouseVector.x = 2 * (e.clientX / SCREEN_WIDTH) - 1;
                 mouseVector.y = 1 - 2 * ( e.clientY / SCREEN_HEIGHT );
@@ -169,7 +185,7 @@
 
 
 
-            scene.add(group);
+            
 
 
 
@@ -226,6 +242,12 @@
             } 
             animate();
             window.addEventListener( 'resize', onWindowResize, false );
+            function getParameterByName(name) {
+                name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
+                var regex = new RegExp("[\\?&]" + name + "=([^&#]*)"),
+                    results = regex.exec(location.search);
+                return results === null ? "" : decodeURIComponent(results[1].replace(/\+/g, " "));
+            }     
         </script>
     </body>
 </html> 
