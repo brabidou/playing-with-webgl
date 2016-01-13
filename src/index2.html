@@ -32,6 +32,9 @@
         <div id="overlay">
             <div>'F' Enable/Disable Floor</div>
             <div>'W' Enable/Disable Wiggle</div>
+            <div>
+                <input type="textbox" id="clickObject" placeholder="enter coordinates 0,0,3">
+            </div>
         </div>
         <script>
             ///////////
@@ -73,7 +76,7 @@
             scene.add( light );
 
             //PointLight(hex, intensity, distance, decay)
-            var pointLight = new THREE.PointLight(0xffffff, 0.9, 1000, .3);
+            var pointLight = new THREE.PointLight(0xffffff, 0.99, 1000, .5);
             pointLight.position.set(130,70,800);
             scene.add(pointLight);
 
@@ -121,12 +124,13 @@
             for(var x=0;x<maxX;x++) {
                 for(var y=0;y<maxY;y++) {
                     for(var z=0;z<maxZ;z++) {
-
                         ///Building up the Spheres
                         var sphereMaterial = new THREE.MeshLambertMaterial( {color: deselctColor} ); 
                         var sphere = new THREE.Mesh(sphereGeometry, sphereMaterial);
                         sphere.position.set((x*distance)-offset, (y*distance)-offset, (z*distance)-offset);
                         sphere.userData.pos = { x: sphere.position.x, y:sphere.position.y, z: sphere.position.z};
+                        sphere.userData.item = { x:x, y:y, z:z};
+                        sphere.userData.isSelected = false;
                         group.add(sphere);
 
                         //Builds up the connection points
@@ -178,10 +182,10 @@
                     for( var i = 0; i < intersects.length; i++ ) {
                         var intersection = intersects[ i ],
                             obj = intersection.object;
-                        if(obj.material.color.getHex() === deselctColor) 
-                            obj.material.color.setHex(selectColor);
+                        if(!obj.userData.isSelected) 
+                            obj.material.color.setHex(selectColor),obj.userData.isSelected=true;
                         else 
-                            obj.material.color.setHex(deselctColor);
+                            obj.material.color.setHex(deselctColor),obj.userData.isSelected=false;
 
                         break;
                     }
@@ -229,16 +233,21 @@
                 renderer.setSize( window.innerWidth, window.innerHeight );
 
             }
+            var angryWiggle = 2.2;
+            var programStart = new Date();
             function animate() {
                 requestAnimationFrame( animate );
+
+                //angryWiggle += ((new Date()) - programStart) / 10000;
+
                 if(wiggle) {
                     for(var i in group.children) {
                         var sphereObject = group.children[i];
                         if(sphereObject.userData.pos) {
                             var p = sphereObject.userData.pos;
-                            var x = p.x + ((Math.random() - .5) * 2.2);
-                            var y = p.y + ((Math.random() - .5) * 2.2);
-                            var z = p.z + ((Math.random() - .5) * 2.2);
+                            var x = p.x + ((Math.random() - .5) * angryWiggle);
+                            var y = p.y + ((Math.random() - .5) * angryWiggle);
+                            var z = p.z + ((Math.random() - .5) * angryWiggle);
                             sphereObject.position.set(x,y,z);
                         }
                     }
@@ -273,10 +282,44 @@
                 controls.update();
             }
 
-            function render() {   
+            function render() {
+
                 renderer.render( scene, camera );
             } 
             animate();
+
+            jQuery("#clickObject").on("keydown", function(e) {
+                if(e.keyCode === 13) {
+                    var clickObject = jQuery("#clickObject");
+                    try {
+                        var parts = clickObject.val().split(',');
+                        var x,y,z;
+
+                        x = parseInt(parts[0]);
+                        y = parseInt(parts[1]);
+                        z = parseInt(parts[2]);
+                        activate(x,y,z);
+                    } catch(ex){}
+
+                    clickObject.val("");
+                }
+            });
+
+            function activate(x,y,z) {
+                for(var i in group.children) {
+                    var sphereObject = group.children[i];
+                    if(sphereObject.userData.item) {
+                        var itemLocation = sphereObject.userData.item;
+                        if(itemLocation.x === x && itemLocation.y === y && itemLocation.z === z) {
+                            if(!sphereObject.userData.isSelected) 
+                                sphereObject.material.color.setHex(selectColor),sphereObject.userData.isSelected=true;
+                            else 
+                                sphereObject.material.color.setHex(deselctColor),sphereObject.userData.isSelected=false;
+                            }
+                    }
+                }
+            }
+
             window.addEventListener( 'resize', onWindowResize, false );
             function getParameterByName(name) {
                 name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
