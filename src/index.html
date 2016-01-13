@@ -52,11 +52,23 @@
             document.body.appendChild( renderer.domElement );
 
 
+            var group = new THREE.Group();
             var geometry = new THREE.BoxGeometry( 100, 100, 100 );
             var material = new THREE.MeshLambertMaterial( { color: 0x00ff00 } );
             var cube = new THREE.Mesh( geometry, material );
             cube.position.set(0, 5, 0);
-            scene.add( cube );
+            //scene.add( cube );
+            group.add(cube);
+
+
+            //var geometry = new THREE.BoxGeometry( 100, 100, 100 );
+            //var material = new THREE.MeshLambertMaterial( { color: 0x00ff00 } );
+            var cube2 = new THREE.Mesh( geometry, material );
+            cube2.position.set(10, 15, 100);
+            group.add( cube2 );
+
+
+            scene.add( group );
 
 
 
@@ -112,47 +124,48 @@
 
                 if ( keyboard.pressed("w") ) {
                     console.log( 'Have a nice day! - w'); 
-                    cube.position.z -= MOVE_BY;
+                    group.position.z -= MOVE_BY;
                 }
                 if ( keyboard.pressed("s") ) {
                     console.log( 'Have a nice day! - s'); 
-                    cube.position.z += MOVE_BY;
+                    group.position.z += MOVE_BY;
                 }
                 if ( keyboard.pressed("a") ) {
                     console.log( 'Have a nice day! - a'); 
-                    cube.position.x -= MOVE_BY;
+                    group.position.x -= MOVE_BY;
                 }
                 if ( keyboard.pressed("d") ) {
                     console.log( 'Have a nice day! - d'); 
-                    cube.position.x += MOVE_BY;
+                    group.position.x += MOVE_BY;
                 }
                 if ( keyboard.pressed("e") ) {
                     console.log( 'Have a nice day! - e'); 
-                    cube.position.y += MOVE_BY;
+                    group.position.y += MOVE_BY;
                 }
                 if ( keyboard.pressed("q") ) {
                     console.log( 'Have a nice day! - q'); 
-                    cube.position.y -= MOVE_BY;
+                    group.position.y -= MOVE_BY;
                 }
                 if ( keyboard.pressed("up") ) {
                     console.log( 'Have a nice day! - up'); 
-                    cube.rotateX(MOVE_BY);
+                    group.rotateX(MOVE_BY);
                 }
                 if ( keyboard.pressed("down") ) {
                     console.log( 'Have a nice day! - down'); 
-                    cube.rotateX(MOVE_BY*-1);
+                    group.rotateX(MOVE_BY*-1);
                 }
                 if ( keyboard.pressed("left") ) {
                     console.log( 'Have a nice day! - left'); 
-                    cube.rotateZ(MOVE_BY);
+                    group.rotateZ(MOVE_BY);
                 }
                 if ( keyboard.pressed("right") ) {
                     console.log( 'Have a nice day! - right'); 
-                    cube.rotateZ(MOVE_BY*-1);
+                    group.rotateZ(MOVE_BY*-1);
                 }
 
-                cube.rotateZ(MOVE_BY*-1);
-                cube.rotateX(MOVE_BY*-1);
+                group.rotateZ(0.01);
+                group.rotateX(0.01);
+                cube.rotateX(0.1);
 
 
                     
