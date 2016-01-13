@@ -30,17 +30,19 @@
     </head>
     <body>
         <div id="overlay">
-            'F' Enable/Disable Floor
+            <div>'F' Enable/Disable Floor</div>
+            <div>'W' Enable/Disable Wiggle</div>
         </div>
         <script>
             ///////////
             // SCENE //
             ///////////
-            scene = new THREE.Scene();
+            var scene = new THREE.Scene();
 
-            projector = new THREE.Projector();
-            mouseVector = new THREE.Vector3();
-            raycaster = new THREE.Raycaster();
+            var projector = new THREE.Projector();
+            var mouseVector = new THREE.Vector3();
+            var raycaster = new THREE.Raycaster();
+            var wiggle = true;
 
 
             ////////////
@@ -124,6 +126,7 @@
                         var sphereMaterial = new THREE.MeshLambertMaterial( {color: deselctColor} ); 
                         var sphere = new THREE.Mesh(sphereGeometry, sphereMaterial);
                         sphere.position.set((x*distance)-offset, (y*distance)-offset, (z*distance)-offset);
+                        sphere.userData.pos = { x: sphere.position.x, y:sphere.position.y, z: sphere.position.z};
                         group.add(sphere);
 
                         //Builds up the connection points
@@ -228,11 +231,24 @@
             }
             function animate() {
                 requestAnimationFrame( animate );
+                if(wiggle) {
+                    for(var i in group.children) {
+                        var sphereObject = group.children[i];
+                        if(sphereObject.userData.pos) {
+                            var p = sphereObject.userData.pos;
+                            var x = p.x + ((Math.random() - .5) * 2.2);
+                            var y = p.y + ((Math.random() - .5) * 2.2);
+                            var z = p.z + ((Math.random() - .5) * 2.2);
+                            sphereObject.position.set(x,y,z);
+                        }
+                    }
+                }
                 render();       
                 update();
             }
 
             var keyboard_f=true;
+            var keyboard_w=true;
             function update() {
                 if ( keyboard.pressed("f") && keyboard_f) {
                     keyboard_f = false;
@@ -242,7 +258,17 @@
                         floor.visible = true;
                     setTimeout(function() {
                         keyboard_f = true;
-                    }, 300);
+                    }, 150);
+                }
+                if ( keyboard.pressed("w") && keyboard_w) {
+                    keyboard_w = false;
+                    if(wiggle)
+                        wiggle = false;
+                    else 
+                        wiggle = true;
+                    setTimeout(function() {
+                        keyboard_w = true;
+                    }, 150);
                 }
                 controls.update();
             }
