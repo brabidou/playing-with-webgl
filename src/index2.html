@@ -95,7 +95,7 @@
 
             var sphereSize = 15;
             var gridSize = 4;
-            
+
             try {
                 if(getParameterByName("size"))
                     gridSize = parseInt(getParameterByName("size"));
@@ -157,25 +157,35 @@
             scene.add(group);
 
 
-            window.addEventListener( 'mousedown', sphere_clicked, false );
-            function sphere_clicked(e) {
+            window.addEventListener( 'mousedown', sphere_mousedown, false );
+            window.addEventListener( 'mouseup', sphere_mouseup, false );
+            var intersects;
+            var start_click;
+            function sphere_mousedown(e) {
+                start_click = new Date();
                 mouseVector.x = 2 * (e.clientX / SCREEN_WIDTH) - 1;
                 mouseVector.y = 1 - 2 * ( e.clientY / SCREEN_HEIGHT );
                 mouseVector.unproject( camera);
                 raycaster.set( camera.position, mouseVector.sub( camera.position ).normalize() );
-                var intersects = raycaster.intersectObjects( group.children );
+                intersects = raycaster.intersectObjects( group.children );
+            }
+            function sphere_mouseup(e) {
+                end_click = new Date();
+                if(intersects && start_click && (new Date())-start_click <= 150) {
+                    for( var i = 0; i < intersects.length; i++ ) {
+                        var intersection = intersects[ i ],
+                            obj = intersection.object;
+                        if(obj.material.color.getHex() === deselctColor) 
+                            obj.material.color.setHex(selectColor);
+                        else 
+                            obj.material.color.setHex(deselctColor);
 
-                for( var i = 0; i < intersects.length; i++ ) {
-                    var intersection = intersects[ i ],
-                        obj = intersection.object;
-                    if(obj.material.color.getHex() === deselctColor) 
-                        obj.material.color.setHex(selectColor);
-                    else 
-                        obj.material.color.setHex(deselctColor);
-
-                    break;
+                        break;
+                    }
+                } else {
+                    intersects = null;
+                    start_click = null;
                 }
-
             }
 
             //var raycaster = projector.pickingRay( mouseVector.clone(), camera );
