@@ -12,6 +12,10 @@
         <script src="js/Detector.js"></script>
         <script src="js/OrbitControls.js"></script>
         <script src="js/THREEx.KeyboardState.js"></script>
+
+        <script src="js/TextGeometry.js"></script>
+        <script src="js/FontUtils.js"></script>
+        <script src="fonts/helvetiker_regular.typeface.js"></script>
     </head>
     <body>
 
@@ -38,7 +42,7 @@
             scene.add(camera);
             // the camera defaults to position (0,0,0)
             //  so pull it back (z = 400) and up (y = 100) and set the angle towards the scene origin
-            camera.position.set(200,200,200);
+            camera.position.set(400,400,400);
             camera.lookAt(scene.position);  
 
             //var renderer = new THREE.WebGLRenderer();
@@ -67,6 +71,36 @@
             cube2.position.set(10, 15, 100);
             group.add( cube2 );
 
+
+
+            var theText = "Sam sucks";
+            var hash = document.location.hash.substr( 1 );
+            if ( hash.length !== 0 ) {
+
+                theText = hash;
+
+            }
+
+            var text3d = new THREE.TextGeometry( theText, {
+
+                size: 80,
+                height: 20,
+                curveSegments: 2,
+                font: "helvetiker"
+
+            });
+
+            text3d.computeBoundingBox();
+            var centerOffset = -0.5 * ( text3d.boundingBox.max.x - text3d.boundingBox.min.x );
+
+            var material = new THREE.MeshFaceMaterial( [
+                new THREE.MeshBasicMaterial( { color: Math.random() * 0xffffff, overdraw: 0.5 } ),
+                new THREE.MeshBasicMaterial( { color: 0x000000, overdraw: 0.5 } )
+            ] );
+
+            text = new THREE.Mesh( text3d, material );
+            text.position.set(0,100,0);
+            scene.add(text);
 
             scene.add( group );
 
@@ -166,7 +200,7 @@
                 group.rotateZ(0.01);
                 group.rotateX(0.01);
                 cube.rotateX(0.1);
-
+                text.rotateY(0.01);
 
                     
                 controls.update();
