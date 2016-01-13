@@ -8,6 +8,8 @@
             canvas { width: 100%; height: 100% }
         </style>
 
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
+
         <script src="js/three.min.js"></script>
         <script src="js/Detector.js"></script>
         <script src="js/OrbitControls.js"></script>
@@ -44,7 +46,7 @@
             scene.add(camera);
             // the camera defaults to position (0,0,0)
             //  so pull it back (z = 400) and up (y = 100) and set the angle towards the scene origin
-            camera.position.set(400,400,400);
+            camera.position.set(500,500,1400);
             camera.lookAt(scene.position);  
 
             //var renderer = new THREE.WebGLRenderer();
@@ -76,6 +78,7 @@
 
 
             var theText = "Sam sucks";
+            if(getParameterByName("msg")) theText = getParameterByName("msg");
             var hash = document.location.hash.substr( 1 );
             if ( hash.length !== 0 ) {
 
@@ -215,7 +218,14 @@
             {   
                 renderer.render( scene, camera );
             } 
-            animate();           
+            animate();    
+
+            function getParameterByName(name) {
+                name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
+                var regex = new RegExp("[\\?&]" + name + "=([^&#]*)"),
+                    results = regex.exec(location.search);
+                return results === null ? "" : decodeURIComponent(results[1].replace(/\+/g, " "));
+            }       
         </script>
     </body>
 </html> 
