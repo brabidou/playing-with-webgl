@@ -116,11 +116,16 @@
             var maxY = gridSize;
             var maxZ = gridSize;
             var distance = 80;
-            var cylinderRadius = 2;
+            var cylinderRadius = 0.2;
+            try {
+                if(getParameterByName("csize"))
+                    cylinderRadius = parseFloat(getParameterByName("csize"));
+            } catch(ex) {}
+
             var cylinderLength = distance - (sphereSize*2.0) + (sphereSize/2.0);
             var offset = (distance * (maxX-1)) / 2.0;
             var sphereGeometry = new THREE.SphereGeometry( sphereSize, 32, 32); 
-            var cylinderGeometry = new THREE.CylinderGeometry( cylinderRadius, cylinderRadius, cylinderLength, 3);
+            var cylinderGeometry = new THREE.CylinderGeometry( cylinderRadius, cylinderRadius, cylinderLength, 32);
 
             var text3d = new THREE.TextGeometry( 1, {
 
@@ -159,7 +164,7 @@
                             var cylinder = new THREE.Mesh( cylinderGeometry, cylinderMaterial );
                             cylinder.position.set((x*distance)-offset+(distance/2), (y*distance)-offset, (z*distance)-offset);
                             cylinder.rotateZ(.5*Math.PI);
-                            //group.add(cylinder);
+                            group.add(cylinder);
                         }
 
                         if(z < maxZ-1) {
@@ -167,7 +172,7 @@
                             var cylinder = new THREE.Mesh( cylinderGeometry, cylinderMaterial );
                             cylinder.position.set((x*distance)-offset, (y*distance)-offset, (z*distance)-offset+(distance/2));
                             cylinder.rotateX(.5*Math.PI);
-                            //group.add(cylinder);
+                            group.add(cylinder);
                         }
 
                         if(y < maxY-1) {
@@ -175,7 +180,7 @@
                             var cylinder = new THREE.Mesh( cylinderGeometry, cylinderMaterial );
                             cylinder.position.set((x*distance)-offset, (y*distance)-offset+(distance/2), (z*distance)-offset);
                             cylinder.rotateY(.5*Math.PI);
-                            //group.add(cylinder);
+                            group.add(cylinder);
                         }
                         
                     }

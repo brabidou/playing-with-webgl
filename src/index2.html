@@ -45,7 +45,7 @@
             var projector = new THREE.Projector();
             var mouseVector = new THREE.Vector3();
             var raycaster = new THREE.Raycaster();
-            var wiggle = true;
+            var wiggle = false;
 
 
             ////////////
@@ -117,6 +117,10 @@
             var maxZ = gridSize;
             var distance = 80;
             var cylinderRadius = 2;
+            try {
+                if(getParameterByName("csize"))
+                    cylinderRadius = parseFloat(getParameterByName("csize"));
+            } catch(ex) {}
             var cylinderLength = distance - (sphereSize*2.0) + (sphereSize/2.0);
             var offset = (distance * (maxX-1)) / 2.0;
             var sphereGeometry = new THREE.SphereGeometry( sphereSize, 32, 32); 
