@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset=utf-8>
+        <title>My first Three.js app</title>
+        <style>
+            body { margin: 0; overflow: hidden; }
+            canvas { width: 100%; height: 100% }
+
+            #overlay {
+                position:absolute;
+                top:0;
+                left:0;
+                background-color: rgba(240,240,240,0.1);
+                color: rgba(240,240,240,0.8);
+            }
+        </style>
+
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
+
+        <script src="js/lib/three.min.js"></script>
+        <script src="js/lib/stats.min.js"></script>
+        <script src="js/lib/Detector.js"></script>
+        <script src="js/lib/OrbitControls.js"></script>
+        <script src="js/lib/Projector.js"></script>
+        <script src="js/lib/THREEx.KeyboardState.js"></script>
+
+        <script src="js/lib/TextGeometry.js"></script>
+        <script src="js/lib/FontUtils.js"></script>
+        <script src="fonts/helvetiker_regular.typeface.js"></script>
+
+
+    </head>
+    <body>
+        <div id="overlay" style="display:">
+            <div>'F' Enable/Disable Floor</div>
+            <div>'W' Enable/Disable Wiggle</div>
+            <div><button id="regen">Regen</button></div>
+            <div>
+                <input type="textbox" id="clickObject" placeholder="enter coordinates 0,0,3">
+            </div>
+        </div>
+
+
+        <script src="js/Logger.js"></script>
+        <script src="js/ApplicationMain.js"></script>
+        <script src="js/SceneManager.js"></script>
+        <script src="js/ObjectsFactory.js"></script>
+        <script>
+            var app = new ApplicationMain();
+        </script>
+    </body>
+</html> 
