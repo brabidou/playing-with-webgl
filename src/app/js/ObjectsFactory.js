@@ -10,7 +10,7 @@ var ObjectsFactory = new function() {
     this._DEFAULT_SPHERE_SIZE = 40.0;
     this._DEFAULT_SPHERE_COLOR = 0xffffff;
     this._DEFAULT_SPHERE_TRASPARENT = true;
-    this._DEFAULT_SPHERE_OPACITY = 0.75;
+    this._DEFAULT_SPHERE_OPACITY = 0.50;
 
     //LIGHTING
     this._DEFAULT_AMBIENT_LIGHT = 0xdddddd;
@@ -18,10 +18,13 @@ var ObjectsFactory = new function() {
     //////////////
     //GENERATORS//
     //////////////
-    this.GenerateTextSphere = function( text, sphere ) {
-        if( !sphere ) {
-            sphere = this.GenerateSphere();
+    this.GenerateTextSphere = function( text, sphere_material ) {
+        if( !sphere_material ) {
+            sphere_material = this.GenerateSphereMaterial();
         }
+        var SphereGeometry  = this.GenerateSphereGeometry();
+        var sphere = this.GenerateSphere(SphereGeometry, sphere_material);
+        
 
         if ( !text ) {
             text = this.GenerateText();
@@ -42,12 +45,7 @@ var ObjectsFactory = new function() {
         }
 
         if( !material ) {
-            material = new THREE.MeshLambertMaterial({
-                color: Math.random() * 0xffffff, 
-                //color: this._DEFAULT_SPHERE_COLOR, 
-                transparent: this._DEFAULT_SPHERE_TRASPARENT, 
-                opacity: this._DEFAULT_SPHERE_OPACITY
-            }); 
+            material = this.GenerateSphereMaterial();
         }
 
         var sphere = new THREE.Mesh(geometry, material);
@@ -66,6 +64,19 @@ var ObjectsFactory = new function() {
         return geometry
     };
 
+    this.GenerateSphereMaterial = function( color ) {
+        if( !color ) {
+            //color = Math.random() * 0xffffff;
+            color = this._DEFAULT_SPHERE_COLOR;
+        }
+        var material = new THREE.MeshLambertMaterial({
+            color : color,
+            transparent: this._DEFAULT_SPHERE_TRASPARENT, 
+            opacity: this._DEFAULT_SPHERE_OPACITY
+        }); 
+        return material;
+    };
+
     this.GenerateText = function( text, geometry, material ) {
         if( !text ) {
             text  = "Hello World";
@@ -73,7 +84,7 @@ var ObjectsFactory = new function() {
 
         if( !geometry ) {
             var geometry = new THREE.TextGeometry( text, {
-                size: 15,
+                size: 25,
                 height: 5,
                 curveSegments: 2,
                 font: "helvetiker"
