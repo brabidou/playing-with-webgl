@@ -1,10 +1,30 @@
+/**
+ * Main entry point for the app
+ *
+ * @class ApplicationMain
+ * @return ApplicationMain Object not instanciated
+ * @author Ben Rabidou
+ * @date_created 1/20/2016
+ */
 var ApplicationMain = function() {
+    this.init(  );
+};
+
+/**
+ * Wires up the defaults for the application
+ *
+ * @constructor init
+ * @return null
+ * @TODO we should pull out the colors from this class
+ */
+ApplicationMain.prototype.init = function(  ) {
     Logger.debug("Creating ApplicationMain");
 
     var sceneManager = new SceneManager( true );
     var gameService = new GameService();
     //var gameManager = new GameManager(sceneManager, gameService);
     var gameManager = new GameManager();
+
 
     document.body.appendChild( sceneManager.createLCA() );
     sceneManager.add( ObjectsFactory.GenerateAmbientLight() );
