@@ -47,6 +47,17 @@ var GameManager = function(  ) {
 
                     var sphere = ObjectsFactory.GenerateTextSphere( server_sphere.value.toString(), _temp_material );
                     sphere.userData.sphere_id = "";
+                    var outerSphere = _.find(sphere.children, function(s){ return s.userData.type === "SPHERE_OBJECT" });
+                    outerSphere.userData.clicked = $.proxy(function( obj ) {
+                        if(obj.userData.selected === true) { 
+                            obj.material = sphere_material_white;
+                            obj.userData.selected = false;
+                        } else {
+                            obj.material = sphere_material_blue;
+                            obj.userData.selected = true;
+                        }
+                    }, this);
+
                     sphere.position.set(
                         (gridPosX * distance) -offset, 
                         (gridPosY * distance) -offset, 

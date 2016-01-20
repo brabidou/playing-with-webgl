@@ -49,6 +49,7 @@ var ObjectsFactory = new function() {
         }
 
         var sphere = new THREE.Mesh(geometry, material);
+        sphere.userData.type = "SPHERE_OBJECT";
         return sphere;
     };
 

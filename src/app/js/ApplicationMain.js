@@ -21,9 +21,23 @@ var ApplicationMain = function() {
     });
 
     gameService.GetGameForUser( game_id, player_id )
-
         .done($.proxy(function( data ) {
             var box = gameManager.createBox(data.board, data.player_one, data.player_two);
+            
+            //We need to add the objects to the make them clikcable
+            for(var i in box.children) {
+                if(box.children[i].userData.type === "SPHERE_OBJECT"){
+                    var item = box.children[i];
+                    sceneManager.addClickableObjects(item);
+                } else {
+                    for(var x in box.children[i].children) {
+                        var item = box.children[i].children[x];
+                        if(item.userData.type === "SPHERE_OBJECT")
+                            sceneManager.addClickableObjects(item);
+                    }
+                }
+            }
+
             sceneManager.add(box);
         }, this))
         .fail($.proxy(function( data ){
