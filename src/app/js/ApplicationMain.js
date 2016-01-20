@@ -23,16 +23,15 @@ var ApplicationMain = function() {
     gameService.GetGameForUser( game_id, player_id )
 
         .done($.proxy(function( data ) {
-
             var box = gameManager.createBox(data.board, data.player_one, data.player_two);
             sceneManager.add(box);
-            loading_screen.finish();
-
         }, this))
-
         .fail($.proxy(function( data ){
             sweetAlert("Oops...", data, "error");
         }, this))
+        .always(function() {
+            loading_screen.finish();
+        })
     ;
 
 
