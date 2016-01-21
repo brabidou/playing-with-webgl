@@ -40,7 +40,7 @@ GameService.prototype.init = function(  ) {
  */
 GameService.prototype.GetGameForUser = function( game_id, user_id ) {
     var ajax_call = {
-        url : this.base_url + "/games/" + game_id + "/user/" + user_id
+        url : this.base_url + "/games/" + game_id + "/player/" + user_id
     };
     jQuery.extend(ajax_call, this.ajax_settings);
     return this._ajaxCall( ajax_call );

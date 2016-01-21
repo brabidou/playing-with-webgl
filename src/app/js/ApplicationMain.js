@@ -30,7 +30,7 @@ ApplicationMain.prototype.init = function(  ) {
     //sceneManager.add( ObjectsFactory.GenerateFloor() );
 
     var game_id = Utilities.getParameterByName("game_id");
-    var player_id = Utilities.getParameterByName("game_id");
+    var player_id = Utilities.getParameterByName("player_id");
 
 
     var loading_screen = pleaseWait({
